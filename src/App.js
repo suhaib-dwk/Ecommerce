@@ -1,10 +1,20 @@
 import React from 'react'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { Home } from './components/Home'
+import { Signup } from './components/Signup'
+import { Login } from './components/Login'
+import { NotFound } from './components/NotFound'
 
 export const App = () => {
   return (
-    <div>
-      ecommerce site with react hooks and firebase
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path='/' element={<Home />} />
+        <Route path='/signup' element={<Signup />} />
+        <Route path='/login' element={<Login />} />
+        <Route path='*' element={<NotFound />} />
+      </Routes>
+    </BrowserRouter>
   )
 }
 
