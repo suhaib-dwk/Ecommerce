@@ -1,2 +1,2 @@
-# Ecommerce
-Ecommerce App that I developed using React Hooks &amp; Firebase
+# Getting Started with Create React App
+Ecommerce App that I developed using React Hooks & Firebase
