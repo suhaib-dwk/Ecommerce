@@ -1,7 +1,11 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { auth } from '../Config/Config'
+import { useNavigate } from 'react-router-dom'
 
 export const Login = () => {
+
+    const navigate = useNavigate()
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -11,7 +15,17 @@ export const Login = () => {
 
     const handleSignup = (e) => {
         e.preventDefault()
-        console.log(email, password)
+        // console.log(email, password)
+        auth.signInWithEmailAndPassword(email, password).then(() => {
+            setSuccessMsg('Signup successfull. You will now get automatically redirected to Home page')
+            setEmail('');
+            setPassword('');
+            setErrorMsg('');
+            setTimeout(() => {
+                setSuccessMsg('');
+                navigate('/')
+            }, 3000)
+        }).catch(error => setErrorMsg(error.message));
     }
 
     return (
@@ -20,6 +34,11 @@ export const Login = () => {
             <br />
             <h1>Log In</h1>
             <hr />
+            {successMsg && <>
+                <div className='alert alert-success'>{successMsg}</div>
+                <br />
+            </>
+            }
             <form className='form-group' autoComplete='off' onSubmit={handleSignup}>
                 <label>Email</label>
                 <input type="email" className='form-control' required
@@ -36,6 +55,11 @@ export const Login = () => {
                     </span>
                 </div>
             </form>
+            {errorMsg && <>
+                <br />
+                <div className='alert alert-warning'>{errorMsg}</div>
+            </>
+            }
         </div>
     )
 }
