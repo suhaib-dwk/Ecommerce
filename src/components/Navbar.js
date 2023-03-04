@@ -2,30 +2,37 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import Logo from '../Images/Logo.png'
 
-export const Navbar = () => {
+export const Navbar = ({ user }) => {
     return (
-        <div className='navbar navbar-light bg-light'>
-            <div className='navbar-brand'>
-                <img src={Logo} width="100" height="100" alt="logo" />
+
+        <div className='navbar'>
+            <div className='left-side'>
+                <div className='logo'>
+                    <img src={Logo} width="70px" height="70px" alt="logo" />
+                </div>
             </div>
-            <div className='right-side'>
-                <div><Link className='nav-link' to="signup">Sign Up</Link></div>
-                <div><Link className='nav-link' to="login">Log In</Link></div>
-            </div>
-            <ul class="nav justify-content-end">
-                <li class="nav-item">
+            <div className='right-side nav-item nav justify-content-start pe-[24px]'>
+
+                {!user && <>
                     <Link className='nav-link' to="signup">Sign Up</Link>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Link</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Link</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link disabled" href="#">Disabled</a>
-                </li>
-            </ul>
+                    <Link className='nav-link' to="login">Log In</Link>
+                </>
+                }
+
+                {user && <>
+                    <div><Link className='nav-link' to="/">{user}</Link></div>
+                    <div className='cart-menu-btn'>
+                        <Link className='nav-link' to="/cart">
+                            {/* <Icon icon={sho}/> */}
+                        </Link>
+                        {/* <span className='cart-indicator'>{totalQty}</span> */}
+                    </div>
+                    {/* <div className='btn btn-danger btn-md' onClick={handleLogout}>
+                        LOGOUT
+                    </div> */}
+                </>}
+
+            </div>
         </div>
     )
 }
