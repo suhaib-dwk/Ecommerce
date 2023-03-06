@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { storage, fs } from '../Config/Config'
-import { ref, uploadBytes } from "firebase/storage";
+import { ref, uploadBytesResumable } from "firebase/storage";
 
 
 const AddProducts = () => {
@@ -16,12 +16,12 @@ const AddProducts = () => {
     const [successMsg, setSuccessMsg] = useState('');
     const [uploadError, setUploadError] = useState('');
 
-    const types = ['image/jpg', 'image/jpeg', 'image/png', 'image/PNG']
-
+    // const types = ['image/jpg', 'image/jpeg', 'image/png', 'image/PNG']
+    // && types.includes(selectedFile.type)
     const handleProductImg = (e) => {
         let selectedFile = e.target.files[0];
         if (selectedFile) {
-            if (selectedFile && types.includes(selectedFile.type)) {
+            if (selectedFile) {
                 setImage(selectedFile);
                 setImageError('')
             }
@@ -41,32 +41,35 @@ const AddProducts = () => {
         // console.log(title, description, price);
         // console.log(image);
         const storageRef = ref(storage, `product-image/${image.name}`);
-        const uploadTask = uploadBytes(storageRef, image);
+        const uploadTask = uploadBytesResumable(storageRef, image);
         uploadTask.on('state_change', (snapshot) => {
             const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
             console.log(`Upload is ${progress}% done`);
-        }, (error) => setUploadError(error.message), () => {
-            storageRef.ref(`product-image`).child(image.name).getDownloadURL().then((url) => {
-                fs.collection('products').add({
-                    title,
-                    description,
-                    price: Number(price),
-                    url
-                }).then(() => {
-                    setSuccessMsg('product added successfully');
-                    setTitle('');
-                    setDescription('');
-                    setPrice('');
-                    document.getElementById('file').value = '';
-                    setImageError('');
-                    setUploadError('');
-                    setTimeout(() => {
-                        setSuccessMsg('');
-                    }, 3000)
-                }).catch(error => setUploadError(error.message));
+        }, (error) => setUploadError(error.message),
+            () => {
+                storage.ref(`product-image`).child(image.name).getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+                    fs.collection('products').add({
+                        title,
+                        description,
+                        price: Number(price),
+                        url
+                    }).then(() => {
+                        setSuccessMsg('product added successfully');
+                        setTitle('');
+                        setDescription('');
+                        setPrice('');
+                        document.getElementById('file').value = '';
+                        setImageError('');
+                        setUploadError('');
+                        setTimeout(() => {
+                            setSuccessMsg('');
+                        }, 3000)
+                    }).catch(error => setUploadError(error.message));
+                })
             })
-        })
     }
+
+
     return (
         <div className='container' onSubmit={handleAddProducts}>
             <br />
