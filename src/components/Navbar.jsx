@@ -1,41 +1,46 @@
 import React from 'react'
+import { NavLink } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 
 const Navbar = () => {
+    const state = useSelector((state) => state.handleCart)
     return (
         <div>
-            <nav class="navbar navbar-expand-lg bg-body-tertiary bg-white py-3 shadow-sm">
-                <div class="container">
-                    <a class="navbar-brand fw-bold fs-4" href="#">
+            <nav className="navbar navbar-expand-lg bg-body-tertiary bg-white py-3 shadow-sm">
+                <div className="container">
+                    <NavLink to="" className="navbar-brand fw-bold fs-4" >
                         Ecommerce 
-                    </a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
+                    </NavLink>
+                    <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span className="navbar-toggler-icon"></span>
                     </button>
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
-                            <li class="nav-item">
-                                <a class="nav-link active" aria-current="page" href="#">Home</a>
+                    <div className="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul className="navbar-nav mx-auto mb-2 mb-lg-0">
+                            <li className="nav-item">
+                                <NavLink className="nav-link active" aria-current="page" to="">Home</NavLink>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Products</a>
+                            <li className="nav-item">
+                                <NavLink className="nav-link" to="/products">Products</NavLink>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link disabled">About</a>
+                            <li className="nav-item">
+                                <NavLink to="/about" className="nav-link disabled">About</NavLink>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link disabled">Contact</a>
+                            <li className="nav-item">
+                                <NavLink to="/contact"className="nav-link disabled">Contact</NavLink>
                             </li>
                         </ul>
                         <div className="buttons">
-                            <a href="" className="btn btn-outline-dark">
+                            <NavLink to="/login" className="btn btn-outline-dark">
                                 <i className="fa fa-sign-in me-1"></i> Login
-                            </a>
-                            <a href="" className="btn btn-outline-dark ms-2">
+                            </NavLink>
+                            <NavLink to="/register" className="btn btn-outline-dark ms-2">
                                 <i className="fa fa-user-plus me-1"></i> Register
-                            </a>
-                            <a href="" className="btn btn-outline-dark ms-2">
-                                <i className="fa fa-shopping-cart me-1"></i> Cart (0)
-                            </a>
+                            </NavLink>
+                            <NavLink to="/cart" className="btn btn-outline-dark ms-2">
+                                <i className="fa fa-shopping-cart me-1"></i> Cart (
+                                    {state.length}
+                                )
+                            </NavLink>
                         </div>
                     </div>
                 </div>
